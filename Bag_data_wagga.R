@@ -6,11 +6,11 @@ library(stringr)
 
 bag_data <- read_excel("raw_data/bag_data_wagga.xlsx")%>%
   unite("Plot", Site_name, Burnt_Unburnt, Quadrat, sep = "", remove = FALSE)
-dried_resins <- read_excel("raw_data/bag_data_wagga.xlsx", 
-                             sheet = "Dry_bead_w")%>%
-  rename(dry_w=Bead_weight)
 
-#average weight of undamaged bag
+dried_resins <- read_excel("raw_data/bag_data_wagga.xlsx", 
+                       sheet = "Dry_bead_w")%>%rename(dry_w=Bead_weight)#make col names good so people take my data seriously
+
+#average weight of undamaged bag #weighed previously 
 initial_bag_w<-15.1257
 dry_bag_w<- 7.09
 
@@ -32,6 +32,7 @@ ggplot(bag_moisture, aes(x = dry_w, y = theoretical_dry_w)) +
        x = "Dry Weight", 
        y = "Theoretical dry weight") +
   theme_minimal()
+#they are
 
 
 # ID damaged bag
@@ -42,7 +43,7 @@ damaged_bags<-bag_data%>%
 
 undamaged_bags<-anti_join(bag_data,damaged_bags)%>%
   group_by(Plot)%>%
-  summarise(field_w=sum(Bag_weight, na.rm = TRUE), #one bag was found out of ground is na, thus the na.rm
+  summarise(field_w=sum(Bag_weight, na.rm = TRUE), #one bag was found out of ground is na
             Reps= n())
 
 #mutate(resin_mass_est = (initial_bag_w * Res_total_Location) / mean_undam_resin_w,
